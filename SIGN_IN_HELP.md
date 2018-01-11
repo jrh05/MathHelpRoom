@@ -13,7 +13,7 @@ Cadets should press the sign in button which provides an interface to input thei
 Signing Out
 -----------
 
-If there are cadets currently signed in to the room, the home page will provide a button to allow them to sign out. It wil provide a list of all of the cadets currently signed in with checkboxes to select one or more cadets to sign out. The app will ask for a confirmation of the names of cadets selected, and will remove them from the room and log the departure time. When the room returns to a state with zero cadets, it will archive the recent sign-ins into the Excel file.
+If there are cadets currently signed in to the room, the home page will provide a button to allow them to sign out. It will provide a list of all of the cadets currently signed in with checkboxes to select one or more cadets to sign out. The app will ask for a confirmation of the names of cadets selected, and will remove them from the room and log the departure time. When the room returns to a state with zero cadets, it will archive the recent sign-ins into the Excel file.
 
 Download File
 -------------
