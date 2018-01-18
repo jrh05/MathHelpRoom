@@ -95,7 +95,10 @@ if (nrow(pastdata) > 1) {
   # Clear the responses file
   cleardata <- read.csv(datafile, as.is = TRUE)[1, ]
   write.csv(cleardata, datafile, row.names = FALSE)
-  
+  cat(paste(Sys.time(), "Archived Data.\n"), 
+      file = "log/logfile.txt",
+      append = TRUE)
 } else {
-  cat("No data available to archive.\n")
+  cat("", file = "log/logfile.txt",
+      append = TRUE)
 }

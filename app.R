@@ -17,6 +17,11 @@ library(shiny)
 library(shinyjs)
 library(shinythemes)
 
+# Write Start Message to Log File
+cat(paste(Sys.time(), "Started App.\n"), 
+    file = "log/logfile.txt",
+    append = TRUE)
+
 # Define key directories and filenames
 responsesDir <- "responses"
 responseFile <- "responsesSpring2018.csv"
@@ -111,9 +116,9 @@ inRoom <- function () {
 # CheckBoxGroup update helper function
 updateCB <- function (session) {
   updateCheckboxGroupInput(session, "out_list", "Select Names to Depart",
-                           choices = ifelse(is.na(cN()), "None", cN()))
-#                            choiceNames = ifelse(is.na(cN()), "None", cN()),
-#                            choiceValues = ifelse(is.na(cV()), "None", cV()))
+                           #choices = ifelse(is.na(cN()), "None", cN()),
+                            choiceNames = ifelse(is.na(cN()), "None", cN()),
+                            choiceValues = ifelse(is.na(cV()), "None", cV()))
 }
 
 ################################################################################
@@ -128,12 +133,6 @@ ui <- fluidPage(
   
   # Application title
   titlePanel(title="USCGA Mathematics Learning Center Attendance Tracker"),
-  
-  # Head HTML Tags
-  # tags$head(
-  #   # Favicon
-  #   tags$link(rel = "shortcut icon", href="/favicon.ico")
-  # ),
   
   tags$head(
     tags$link(
@@ -179,9 +178,9 @@ ui <- fluidPage(
       checkboxGroupInput(
         "out_list",
         "Select Names to Depart",
-        choices = cN()
-#        choiceNames = ifelse(is.na(cN()), "None", cN())#,
-#        choiceValues = ifelse(is.na(cV()), "None", cV())
+        #choices = cN(),
+        choiceNames = ifelse(is.na(cN()), "None", cN()),
+        choiceValues = ifelse(is.na(cV()), "None", cV())
       ),
       actionButton("check_choices", "Sign Out", class = "btn-primary")
     )),
@@ -221,10 +220,13 @@ server <- function(input, output, session) {
   exitData <- reactive({
     datafile <- file.path(responsesDir, responseFile)
     pastdata <- read.csv(datafile, as.is = TRUE)
-    ind <- stillHere()$id[which(input$out_list %in% stillHere()$name)]
-#    ind <- stillHere()$id[paste(input$out_list)]   # Works with the new groupCheckBoxInput
+    
+    ind <- stillHere()$id[paste(input$out_list)]   # Works with the new groupCheckBoxInput
     pastdata[pastdata$start_time %in% ind, "end_time"] <-
       humanTime()
+    cat(paste(Sys.time(), "Signed Out ", length(ind), "cadets.\n"), 
+        file = "log/logfile.txt",
+        append = TRUE)
     pastdata
   })
   
@@ -268,8 +270,7 @@ server <- function(input, output, session) {
   observeEvent(input$check_choices, {
     shinyjs::show("sign_out_confirm")
     output$out_names <- renderText({
-#      exitlist <- paste(stillHere()$name[input$out_list], collapse = ", ")
-      exitlist <- paste(input$out_list, collapse = ", ")
+      exitlist <- paste(stillHere()$name[input$out_list], collapse = ", ")
       paste("Are you sure you want the following individuals to Exit:",
             exitlist,
             sep = "\n")
@@ -319,12 +320,12 @@ server <- function(input, output, session) {
   
   # Exit on Close
   
-  session$onSessionEnded(stopApp)
-  
-  # session$onSessionEnded( function() {
-  #   stopApp()
-  #   q("no")
-  #   })
+  session$onSessionEnded({
+    cat(paste(Sys.time(), "Stopped App.\n"), 
+        file = "log/logfile.txt",
+        append = TRUE)
+    stopApp
+    })
 
 }
 
