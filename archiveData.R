@@ -1,5 +1,5 @@
 #
-# This script runs once daily to move help room daily cadets into the archive 
+# This script move help room cadet information into the archive 
 # Author: Jonathan Harris, LCDR, USCG
 # Purpose: This application is used to track attendance at the U.S. Coast Guard
 # Academy Mathematics Help Room.

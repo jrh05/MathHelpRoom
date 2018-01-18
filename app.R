@@ -309,13 +309,7 @@ server <- function(input, output, session) {
   # Action to take when opting to download sign-in data
   output$download <- downloadHandler(
     filename = paste0(humanTime(), " - ", excelFile), 
-    # filename = "temp.csv",
-    # content = function(file) {
-    #   pastdata <- getData()
-    #   write.csv(pastdata, file, row.names = FALSE)
-    # },
-    content = function (file) file.copy(file.path(excelDir, excelFile), file)#,
-    #contentType = "text/csv"
+    content = function (file) file.copy(file.path(excelDir, excelFile), file)
   )
   
   # Exit on Close
